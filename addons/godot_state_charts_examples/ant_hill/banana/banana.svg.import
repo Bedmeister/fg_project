@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://tfbqclya7bfd"
-path="res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.ctex"
+uid="uid://cqt6bgiwgqym7"
+path="res://.godot/imported/banana.svg-a5ad2289239814c02934d0f13a5a82fa.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://icon.svg"
-dest_files=["res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.ctex"]
+source_file="res://addons/godot_state_charts_examples/ant_hill/banana/banana.svg"
+dest_files=["res://.godot/imported/banana.svg-a5ad2289239814c02934d0f13a5a82fa.ctex"]
 
 [params]
 

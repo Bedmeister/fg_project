@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://tfbqclya7bfd"
-path="res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.ctex"
+uid="uid://bgw8xgbwc2flx"
+path="res://.godot/imported/white_rectangle.svg-6519b75ae066db79888f28115a0e6f23.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://icon.svg"
-dest_files=["res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.ctex"]
+source_file="res://addons/godot_state_charts_examples/history_states/white_rectangle.svg"
+dest_files=["res://.godot/imported/white_rectangle.svg-6519b75ae066db79888f28115a0e6f23.ctex"]
 
 [params]
 

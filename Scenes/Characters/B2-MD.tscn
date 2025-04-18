@@ -1,0 +1,174 @@
+[gd_scene load_steps=12 format=3 uid="uid://bvw7u554liayn"]
+
+[ext_resource type="Script" path="res://Scripts/Characters/b_2_md.gd" id="1_8svha"]
+[ext_resource type="Texture2D" uid="uid://cupebuxoalkhd" path="res://Assets/Sprites/Characters/B2-MD/Idle/Idle0.png" id="2_ighlx"]
+[ext_resource type="Script" path="res://godot_state_charts/state_chart.gd" id="3_0nucv"]
+[ext_resource type="Texture2D" uid="uid://cnpyl2bnwejc7" path="res://Assets/Sprites/Characters/B2-MD/Jump/Jump0.png" id="3_6w6uw"]
+[ext_resource type="Texture2D" uid="uid://duvdg3smvn7rh" path="res://Assets/Sprites/Characters/B2-MD/walk/walk0.png" id="3_31ce8"]
+[ext_resource type="Texture2D" uid="uid://cks03rt48iaxm" path="res://Assets/Sprites/Characters/B2-MD/walk/walk1.png" id="4_qhvw7"]
+[ext_resource type="Script" path="res://godot_state_charts/compound_state.gd" id="4_w15ok"]
+[ext_resource type="Script" path="res://godot_state_charts/atomic_state.gd" id="5_yfjpd"]
+[ext_resource type="Script" path="res://godot_state_charts/transition.gd" id="6_4ycrl"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_mpfo3"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_ighlx")
+}],
+"loop": true,
+"name": &"Idle",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_6w6uw")
+}],
+"loop": true,
+"name": &"Jump",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_31ce8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_ighlx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_qhvw7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_ighlx")
+}],
+"loop": true,
+"name": &"Walk",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hlf2r"]
+size = Vector2(87, 291)
+
+[node name="B2-MD" type="CharacterBody2D"]
+script = ExtResource("1_8svha")
+
+[node name="Player_animations" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_mpfo3")
+animation = &"Idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-5.5, 2.5)
+shape = SubResource("RectangleShape2D_hlf2r")
+
+[node name="Attack_animations" type="AnimationPlayer" parent="."]
+
+[node name="StateChart" type="Node" parent="."]
+script = ExtResource("3_0nucv")
+
+[node name="Root" type="Node" parent="StateChart"]
+script = ExtResource("4_w15ok")
+initial_state = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="StateChart/Root"]
+script = ExtResource("5_yfjpd")
+
+[node name="Walk" type="Node" parent="StateChart/Root/Idle"]
+script = ExtResource("6_4ycrl")
+to = NodePath("../../Walk")
+event = &"to_walk"
+delay_in_seconds = "0.0"
+
+[node name="Jump" type="Node" parent="StateChart/Root/Idle"]
+script = ExtResource("6_4ycrl")
+to = NodePath("../../Jump")
+event = &"to_jump"
+delay_in_seconds = "0.0"
+
+[node name="Crouch" type="Node" parent="StateChart/Root/Idle"]
+script = ExtResource("6_4ycrl")
+to = NodePath("../../Crouch")
+event = &"to_crouch"
+delay_in_seconds = "0.0"
+
+[node name="Walk" type="Node" parent="StateChart/Root"]
+script = ExtResource("5_yfjpd")
+
+[node name="Idle" type="Node" parent="StateChart/Root/Walk"]
+script = ExtResource("6_4ycrl")
+to = NodePath("../../Idle")
+event = &"to_idle"
+delay_in_seconds = "0.0"
+
+[node name="Jump" type="Node" parent="StateChart/Root/Walk"]
+script = ExtResource("6_4ycrl")
+to = NodePath("../../Jump")
+event = &"to_jump"
+delay_in_seconds = "0.0"
+
+[node name="Crouch" type="Node" parent="StateChart/Root/Walk"]
+script = ExtResource("6_4ycrl")
+to = NodePath("../../Crouch")
+event = &"to_crouch"
+delay_in_seconds = "0.0"
+
+[node name="Crouch" type="Node" parent="StateChart/Root"]
+script = ExtResource("5_yfjpd")
+
+[node name="Idle" type="Node" parent="StateChart/Root/Crouch"]
+script = ExtResource("6_4ycrl")
+to = NodePath("../../Idle")
+event = &"to_idle"
+delay_in_seconds = "0.0"
+
+[node name="Jump" type="Node" parent="StateChart/Root"]
+script = ExtResource("5_yfjpd")
+
+[node name="Idle" type="Node" parent="StateChart/Root/Jump"]
+script = ExtResource("6_4ycrl")
+to = NodePath("../../Idle")
+event = &"to_idle"
+delay_in_seconds = "0.0"
+
+[node name="Walk" type="Node" parent="StateChart/Root/Jump"]
+script = ExtResource("6_4ycrl")
+to = NodePath("../../Walk")
+event = &"to_walk"
+delay_in_seconds = "0.0"
+
+[node name="Double_Jump" type="Node" parent="StateChart/Root/Jump"]
+script = ExtResource("6_4ycrl")
+to = NodePath("../../Double_Jump")
+event = &"to_double_jump"
+delay_in_seconds = "0.0"
+
+[node name="Double_Jump" type="Node" parent="StateChart/Root"]
+script = ExtResource("5_yfjpd")
+
+[node name="Idle" type="Node" parent="StateChart/Root/Double_Jump"]
+script = ExtResource("6_4ycrl")
+to = NodePath("../../Idle")
+event = &"to_idle"
+delay_in_seconds = "0.0"
+
+[node name="Walk" type="Node" parent="StateChart/Root/Double_Jump"]
+script = ExtResource("6_4ycrl")
+to = NodePath("../../Walk")
+event = &"to_walk"
+delay_in_seconds = "0.0"
+
+[connection signal="state_entered" from="StateChart/Root/Idle" to="." method="_on_idle_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Idle" to="." method="_on_idle_state_physics_processing"]
+[connection signal="state_processing" from="StateChart/Root/Idle" to="." method="_on_idle_state_processing"]
+[connection signal="state_entered" from="StateChart/Root/Walk" to="." method="_on_walk_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Walk" to="." method="_on_walk_state_physics_processing"]
+[connection signal="state_processing" from="StateChart/Root/Walk" to="." method="_on_walk_state_processing"]
+[connection signal="state_entered" from="StateChart/Root/Crouch" to="." method="_on_crouch_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Crouch" to="." method="_on_crouch_state_physics_processing"]
+[connection signal="state_processing" from="StateChart/Root/Crouch" to="." method="_on_crouch_state_processing"]
+[connection signal="state_entered" from="StateChart/Root/Jump" to="." method="_on_jump_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Jump" to="." method="_on_jump_state_exited"]
+[connection signal="state_physics_processing" from="StateChart/Root/Jump" to="." method="_on_jump_state_physics_processing"]
+[connection signal="state_processing" from="StateChart/Root/Jump" to="." method="_on_jump_state_processing"]
+[connection signal="state_entered" from="StateChart/Root/Double_Jump" to="." method="_on_double_jump_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Double_Jump" to="." method="_on_double_jump_state_physics_processing"]
+[connection signal="state_processing" from="StateChart/Root/Double_Jump" to="." method="_on_double_jump_state_processing"]

@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://1534dcoylsdp"]
+
+[ext_resource type="PackedScene" uid="uid://ccunhg40rq45q" path="res://Scenes/Stages/stage_placeholder.tscn" id="1_a30qv"]
+[ext_resource type="PackedScene" uid="uid://bvw7u554liayn" path="res://Scenes/Characters/B2-MD.tscn" id="2_obi77"]
+
+[node name="Node" type="Node"]
+
+[node name="Stage" parent="." instance=ExtResource("1_a30qv")]
+
+[node name="B2-MD" parent="." instance=ExtResource("2_obi77")]
+position = Vector2(675, 875)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(917, 685)
