@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://cje5ujonm5i0"]
 
-[ext_resource type="FontFile" uid="uid://bs8qugglds06m" path="res://kenney_kenney-fonts/Fonts/Kenney High.ttf" id="1_mx6ue"]
+[ext_resource type="FontFile" uid="uid://doosu1j3ke743" path="res://Kenney High.ttf" id="1_mx6ue"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3ge6b"]
 bg_color = Color(1, 1, 1, 1)
