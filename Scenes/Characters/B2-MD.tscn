@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://bvw7u554liayn"]
+[gd_scene load_steps=16 format=3 uid="uid://bvw7u554liayn"]
 
 [ext_resource type="Script" path="res://Scripts/Characters/b_2_md.gd" id="1_8svha"]
 [ext_resource type="Texture2D" uid="uid://cupebuxoalkhd" path="res://Assets/Sprites/Characters/B2-MD/Idle/Idle0.png" id="2_ighlx"]
@@ -49,25 +49,91 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hlf2r"]
 size = Vector2(87, 291)
 
-[node name="B2-MD" type="CharacterBody2D"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xxxf5"]
+size = Vector2(84.5, 47)
+
+[sub_resource type="Animation" id="Animation_4tpb7"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Attacks/punch:disabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_vvcr8"]
+resource_name = "punch"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Attacks/punch:disabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.133333, 0.366667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ag4xd"]
+_data = {
+"RESET": SubResource("Animation_4tpb7"),
+"punch": SubResource("Animation_vvcr8")
+}
+
+[node name="B2-MD" type="CharacterBody2D" groups=["Player"]]
 script = ExtResource("1_8svha")
 
 [node name="Player_animations" type="AnimatedSprite2D" parent="."]
+position = Vector2(1, -3)
 sprite_frames = SubResource("SpriteFrames_mpfo3")
 animation = &"Idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(-5.5, 2.5)
 shape = SubResource("RectangleShape2D_hlf2r")
 
-[node name="Attack_animations" type="AnimationPlayer" parent="."]
+[node name="Attacks" type="Area2D" parent="."]
+
+[node name="punch" type="CollisionShape2D" parent="Attacks"]
+position = Vector2(-81.75, -80)
+shape = SubResource("RectangleShape2D_xxxf5")
+disabled = true
+debug_color = Color(0, 1, 0, 0.419608)
+
+[node name="timers" type="Node" parent="."]
+
+[node name="dash" type="Timer" parent="timers"]
+process_callback = 0
+wait_time = 0.2
+one_shot = true
+
+[node name="punch" type="Node" parent="timers"]
+
+[node name="punch" type="Timer" parent="timers/punch"]
+process_callback = 0
+wait_time = 0.5
+one_shot = true
+
+[node name="kick" type="Node" parent="timers"]
+
+[node name="slash" type="Node" parent="timers"]
+
+[node name="heavy" type="Node" parent="timers"]
 
 [node name="StateChart" type="Node" parent="."]
 script = ExtResource("3_0nucv")
 
 [node name="Root" type="Node" parent="StateChart"]
 script = ExtResource("4_w15ok")
-initial_state = NodePath("Idle")
+initial_state = NodePath("Jump")
 
 [node name="Idle" type="Node" parent="StateChart/Root"]
 script = ExtResource("5_yfjpd")
@@ -90,6 +156,12 @@ to = NodePath("../../Crouch")
 event = &"to_crouch"
 delay_in_seconds = "0.0"
 
+[node name="Punch" type="Node" parent="StateChart/Root/Idle"]
+script = ExtResource("6_4ycrl")
+to = NodePath("../../Punch")
+event = &"to_punch"
+delay_in_seconds = "0.0"
+
 [node name="Walk" type="Node" parent="StateChart/Root"]
 script = ExtResource("5_yfjpd")
 
@@ -109,6 +181,18 @@ delay_in_seconds = "0.0"
 script = ExtResource("6_4ycrl")
 to = NodePath("../../Crouch")
 event = &"to_crouch"
+delay_in_seconds = "0.0"
+
+[node name="Step-Dash" type="Node" parent="StateChart/Root/Walk"]
+script = ExtResource("6_4ycrl")
+to = NodePath("../../Step-Dash")
+event = &"to_dash"
+delay_in_seconds = "0.0"
+
+[node name="Punch" type="Node" parent="StateChart/Root/Walk"]
+script = ExtResource("6_4ycrl")
+to = NodePath("../../Punch")
+event = &"to_punch"
 delay_in_seconds = "0.0"
 
 [node name="Crouch" type="Node" parent="StateChart/Root"]
@@ -156,6 +240,31 @@ to = NodePath("../../Walk")
 event = &"to_walk"
 delay_in_seconds = "0.0"
 
+[node name="Step-Dash" type="Node" parent="StateChart/Root"]
+script = ExtResource("5_yfjpd")
+
+[node name="Idle" type="Node" parent="StateChart/Root/Step-Dash"]
+script = ExtResource("6_4ycrl")
+to = NodePath("../../Idle")
+event = &"to_idle"
+delay_in_seconds = "0.0"
+
+[node name="Punch" type="Node" parent="StateChart/Root"]
+script = ExtResource("5_yfjpd")
+
+[node name="Idle" type="Node" parent="StateChart/Root/Punch"]
+script = ExtResource("6_4ycrl")
+to = NodePath("../../Idle")
+event = &"to_idle"
+delay_in_seconds = "0.0"
+
+[node name="Attacks_ani" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_ag4xd")
+}
+
+[connection signal="timeout" from="timers/dash" to="." method="_on_timer_timeout"]
+[connection signal="timeout" from="timers/punch/punch" to="." method="_on_punch_timeout"]
 [connection signal="state_entered" from="StateChart/Root/Idle" to="." method="_on_idle_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Idle" to="." method="_on_idle_state_physics_processing"]
 [connection signal="state_processing" from="StateChart/Root/Idle" to="." method="_on_idle_state_processing"]
@@ -172,3 +281,10 @@ delay_in_seconds = "0.0"
 [connection signal="state_entered" from="StateChart/Root/Double_Jump" to="." method="_on_double_jump_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Double_Jump" to="." method="_on_double_jump_state_physics_processing"]
 [connection signal="state_processing" from="StateChart/Root/Double_Jump" to="." method="_on_double_jump_state_processing"]
+[connection signal="state_entered" from="StateChart/Root/Step-Dash" to="." method="_on_step_dash_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Step-Dash" to="." method="_on_step_dash_state_physics_processing"]
+[connection signal="state_processing" from="StateChart/Root/Step-Dash" to="." method="_on_step_dash_state_processing"]
+[connection signal="state_entered" from="StateChart/Root/Punch" to="." method="_on_punch_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Punch" to="." method="_on_punch_state_physics_processing"]
+[connection signal="state_processing" from="StateChart/Root/Punch" to="." method="_on_punch_state_processing"]
+[connection signal="animation_finished" from="Attacks_ani" to="." method="_on_attacks_ani_animation_finished"]

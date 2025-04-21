@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://1534dcoylsdp"]
+
+[ext_resource type="PackedScene" uid="uid://ccunhg40rq45q" path="res://Scenes/Stages/stage_placeholder.tscn" id="1_p85ev"]
+[ext_resource type="PackedScene" uid="uid://bvw7u554liayn" path="res://Scenes/Characters/B2-MD.tscn" id="2_x2mih"]
+
+[node name="Node" type="Node"]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(946, 696)
+
+[node name="Stage" parent="." instance=ExtResource("1_p85ev")]
+
+[node name="Player_1" parent="." node_paths=PackedStringArray("enemy") instance=ExtResource("2_x2mih")]
+position = Vector2(548, 704)
+enemy = NodePath("../Player_2")
+
+[node name="Player_2" parent="." instance=ExtResource("2_x2mih")]
+position = Vector2(941, 873)
+script = null

@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://c6xg6lsofihlw"]
+
+[node name="Node" type="Node"]
+
+[node name="B2_MD" type="Button" parent="."]
+offset_left = 914.0
+offset_right = 1920.0
+offset_bottom = 590.0
+text = "B2_MD"
+
+[node name="VISCERA" type="Button" parent="."]
+offset_top = 592.0
+offset_right = 912.0
+offset_bottom = 1080.0
+text = "Viscera"
+
+[node name="PROTO_M8" type="Button" parent="."]
+offset_right = 912.0
+offset_bottom = 590.0
+text = "Proto_m8"
+
+[node name="IRON_BEAR" type="Button" parent="."]
+offset_left = 914.0
+offset_top = 590.0
+offset_right = 1920.0
+offset_bottom = 1080.0
+text = "Iron_bear"
