@@ -1,6 +1,55 @@
-[gd_resource type="Resource" load_steps=2 format=3 uid="uid://c428aquhxk6bh"]
+[gd_resource type="Resource" script_class="B2_MD" load_steps=2 format=3 uid="uid://c428aquhxk6bh"]
 
 [ext_resource type="Script" path="res://Scenes/Resources/b2_md_resource.gd" id="1_56b3a"]
 
 [resource]
 script = ExtResource("1_56b3a")
+slash_rating = 4.0
+punch_attack_damage = 10.0
+punch_attack_rating = 1.0
+punch_launch_rating = 0.1
+punch_counter_rating = 1.1
+kick_attack_damage = 20.0
+kick_attack_rating = 1.0
+kick_launch_rating = 0.5
+kick_counter_rating = 1.3
+slash_attack_damage = 30.0
+slash_attack_rating = 1.0
+slash_launch_rating = 0.5
+slash_counter_rating = 1.5
+heavy_attack_damage = 40.0
+heavy_attack_rating = 1.0
+heavy_launch_rating = 1.0
+heavy_counter_rating = 1.8
+crouch_punch_attack_damage = 5.0
+crouch_punch_attack_rating = 1.0
+crouch_punch_launch_rating = 0.1
+crouch_punch_counter_rating = 1.1
+crouch_kick_attack_damage = 15.0
+crouch_kick_attack_rating = 1.0
+crouch_kick_launch_rating = 0.3
+crouch_kick_counter_rating = 1.3
+crouch_slash_attack_damage = 25.0
+crouch_slash_attack_rating = 1.0
+crouch_slash_launch_rating = 0.7
+crouch_slash_counter_rating = 1.6
+crouch_heavy_attack_damage = 40.0
+crouch_heavy_attack_rating = 1.0
+crouch_heavy_launch_rating = 1.0
+crouch_heavy_counter_rating = 2.0
+air_punch_attack_damage = 10.0
+air_punch_attack_rating = 1.0
+air_punch_launch_rating = 0.1
+air_punch_counter_rating = 1.2
+air_kick_attack_damage = 20.0
+air_kick_attack_rating = 1.0
+air_kick_launch_rating = 0.5
+air_kick_counter_rating = 1.5
+air_slash_attack_damage = 30.0
+air_slash_attack_rating = 1.0
+air_slash_launch_rating = 0.7
+air_slash_counter_rating = 1.7
+air_heavy_attack_damage = 40.0
+air_heavy_attack_rating = 1.0
+air_heavy_launch_rating = 0.7
+air_heavy_counter_rating = 1.9

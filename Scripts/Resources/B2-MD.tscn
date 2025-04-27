@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://bt3xl0r2iichp"]
+[gd_scene load_steps=24 format=3 uid="uid://bt3xl0r2iichp"]
 
 [ext_resource type="Script" path="res://Scripts/Characters/b_2_md.gd" id="1_4s6gi"]
 [ext_resource type="Texture2D" uid="uid://cupebuxoalkhd" path="res://Assets/Sprites/Characters/B2-MD/Idle/Idle0.png" id="2_poqvp"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" path="res://godot_state_charts/compound_state.gd" id="7_o6vms"]
 [ext_resource type="Script" path="res://godot_state_charts/atomic_state.gd" id="8_sip4g"]
 [ext_resource type="Script" path="res://godot_state_charts/transition.gd" id="9_eymso"]
+[ext_resource type="Script" path="res://godot_state_charts/expression_guard.gd" id="10_e7cdb"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_mpfo3"]
 animations = [{
@@ -69,6 +70,10 @@ size = Vector2(115.5, 152)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cifkf"]
 size = Vector2(144.5, 103)
+
+[sub_resource type="Resource" id="Resource_gd8lg"]
+script = ExtResource("10_e7cdb")
+expression = "if double_jump == false and jump == true"
 
 [sub_resource type="Animation" id="Animation_4tpb7"]
 length = 0.001
@@ -259,16 +264,10 @@ to = NodePath("../../Juggled")
 event = &"to_juggled"
 delay_in_seconds = "0.0"
 
-[node name="Death" type="Node" parent="StateChart/Root/Idle"]
-script = ExtResource("9_eymso")
-to = NodePath("../../Death")
-event = &"to_death"
-delay_in_seconds = "0.0"
-
 [node name="Attack" type="Node" parent="StateChart/Root/Idle"]
 script = ExtResource("9_eymso")
-to = NodePath("..")
-event = &"to_attack"
+to = NodePath("../../Attacking")
+event = &"to_attacking"
 delay_in_seconds = "0.0"
 
 [node name="Walk" type="Node" parent="StateChart/Root"]
@@ -312,8 +311,8 @@ delay_in_seconds = "0.0"
 
 [node name="Attack" type="Node" parent="StateChart/Root/Walk"]
 script = ExtResource("9_eymso")
-to = NodePath("..")
-event = &"to_attack"
+to = NodePath("../../Attacking")
+event = &"to_attacking"
 delay_in_seconds = "0.0"
 
 [node name="Crouch" type="Node" parent="StateChart/Root"]
@@ -358,12 +357,6 @@ to = NodePath("../../Walk")
 event = &"to_walk"
 delay_in_seconds = "0.0"
 
-[node name="Double_Jump" type="Node" parent="StateChart/Root/Jump"]
-script = ExtResource("9_eymso")
-to = NodePath("../../Double_Jump")
-event = &"to_double_jump"
-delay_in_seconds = "0.0"
-
 [node name="Juggled" type="Node" parent="StateChart/Root/Jump"]
 script = ExtResource("9_eymso")
 to = NodePath("../../Juggled")
@@ -376,31 +369,11 @@ to = NodePath("..")
 event = &"to_attack"
 delay_in_seconds = "0.0"
 
-[node name="Double_Jump" type="Node" parent="StateChart/Root"]
-script = ExtResource("8_sip4g")
-
-[node name="Idle" type="Node" parent="StateChart/Root/Double_Jump"]
-script = ExtResource("9_eymso")
-to = NodePath("../../Idle")
-event = &"to_idle"
-delay_in_seconds = "0.0"
-
-[node name="Walk" type="Node" parent="StateChart/Root/Double_Jump"]
-script = ExtResource("9_eymso")
-to = NodePath("../../Walk")
-event = &"to_walk"
-delay_in_seconds = "0.0"
-
-[node name="Juggled" type="Node" parent="StateChart/Root/Double_Jump"]
-script = ExtResource("9_eymso")
-to = NodePath("../../Juggled")
-event = &"to_juggled"
-delay_in_seconds = "0.0"
-
-[node name="Attack" type="Node" parent="StateChart/Root/Double_Jump"]
+[node name="Jump" type="Node" parent="StateChart/Root/Jump"]
 script = ExtResource("9_eymso")
 to = NodePath("..")
-event = &"to_attack"
+event = &"to_jump"
+guard = SubResource("Resource_gd8lg")
 delay_in_seconds = "0.0"
 
 [node name="Step-Dash" type="Node" parent="StateChart/Root"]
@@ -439,12 +412,6 @@ to = NodePath("../../Idle")
 event = &"to_idle"
 delay_in_seconds = "0.0"
 
-[node name="Death" type="Node" parent="StateChart/Root/Hitstun"]
-script = ExtResource("9_eymso")
-to = NodePath("../../Death")
-event = &"to_death"
-delay_in_seconds = "0.0"
-
 [node name="Juggled" type="Node" parent="StateChart/Root"]
 script = ExtResource("8_sip4g")
 
@@ -454,26 +421,14 @@ to = NodePath("../../Idle")
 event = &"to_idle"
 delay_in_seconds = "0.0"
 
-[node name="Death" type="Node" parent="StateChart/Root/Juggled"]
-script = ExtResource("9_eymso")
-to = NodePath("../../Death")
-event = &"to_death"
-delay_in_seconds = "0.0"
-
 [node name="Knocked_Down" type="Node" parent="StateChart/Root/Juggled"]
 script = ExtResource("9_eymso")
 to = NodePath("../../Knocked_Down")
 event = &"to_knocked_down"
 delay_in_seconds = "0.0"
 
-[node name="Death" type="Node" parent="StateChart/Root"]
+[node name="Attacking" type="Node" parent="StateChart/Root"]
 script = ExtResource("8_sip4g")
-
-[node name="Idle" type="Node" parent="StateChart/Root/Death"]
-script = ExtResource("9_eymso")
-to = NodePath("../../Idle")
-event = &"to_idle"
-delay_in_seconds = "0.0"
 
 [node name="Knocked_Down" type="Node" parent="StateChart/Root"]
 script = ExtResource("8_sip4g")
@@ -482,15 +437,6 @@ script = ExtResource("8_sip4g")
 script = ExtResource("9_eymso")
 to = NodePath("../../Idle")
 event = &"to_idle"
-delay_in_seconds = "0.0"
-
-[node name="Attack" type="Node" parent="StateChart/Root"]
-script = ExtResource("8_sip4g")
-
-[node name="Attack" type="Node" parent="StateChart/Root/Attack"]
-script = ExtResource("9_eymso")
-to = NodePath("..")
-event = &"to_attack"
 delay_in_seconds = "0.0"
 
 [node name="Attacks_ani" type="AnimationPlayer" parent="."]
@@ -516,10 +462,6 @@ libraries = {
 [connection signal="state_exited" from="StateChart/Root/Jump" to="." method="_on_jump_state_exited"]
 [connection signal="state_physics_processing" from="StateChart/Root/Jump" to="." method="_on_jump_state_physics_processing"]
 [connection signal="state_processing" from="StateChart/Root/Jump" to="." method="_on_jump_state_processing"]
-[connection signal="state_entered" from="StateChart/Root/Double_Jump" to="." method="_on_double_jump_state_entered"]
-[connection signal="state_exited" from="StateChart/Root/Double_Jump" to="." method="_on_double_jump_state_exited"]
-[connection signal="state_physics_processing" from="StateChart/Root/Double_Jump" to="." method="_on_double_jump_state_physics_processing"]
-[connection signal="state_processing" from="StateChart/Root/Double_Jump" to="." method="_on_double_jump_state_processing"]
 [connection signal="state_entered" from="StateChart/Root/Step-Dash" to="." method="_on_step_dash_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Step-Dash" to="." method="_on_step_dash_state_exited"]
 [connection signal="state_physics_processing" from="StateChart/Root/Step-Dash" to="." method="_on_step_dash_state_physics_processing"]
@@ -532,16 +474,12 @@ libraries = {
 [connection signal="state_exited" from="StateChart/Root/Juggled" to="." method="_on_juggled_state_exited"]
 [connection signal="state_physics_processing" from="StateChart/Root/Juggled" to="." method="_on_juggled_state_physics_processing"]
 [connection signal="state_processing" from="StateChart/Root/Juggled" to="." method="_on_juggled_state_processing"]
-[connection signal="state_entered" from="StateChart/Root/Death" to="." method="_on_death_state_entered"]
-[connection signal="state_exited" from="StateChart/Root/Death" to="." method="_on_death_state_exited"]
-[connection signal="state_physics_processing" from="StateChart/Root/Death" to="." method="_on_death_state_physics_processing"]
-[connection signal="state_processing" from="StateChart/Root/Death" to="." method="_on_death_state_processing"]
+[connection signal="state_entered" from="StateChart/Root/Attacking" to="." method="_on_attacking_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Attacking" to="." method="_on_attacking_state_exited"]
+[connection signal="state_physics_processing" from="StateChart/Root/Attacking" to="." method="_on_attacking_state_physics_processing"]
+[connection signal="state_processing" from="StateChart/Root/Attacking" to="." method="_on_attacking_state_processing"]
 [connection signal="state_entered" from="StateChart/Root/Knocked_Down" to="." method="_on_knocked_down_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Knocked_Down" to="." method="_on_knocked_down_state_exited"]
 [connection signal="state_physics_processing" from="StateChart/Root/Knocked_Down" to="." method="_on_knocked_down_state_physics_processing"]
 [connection signal="state_processing" from="StateChart/Root/Knocked_Down" to="." method="_on_knocked_down_state_processing"]
-[connection signal="state_entered" from="StateChart/Root/Attack" to="." method="_on_attack_state_entered"]
-[connection signal="state_exited" from="StateChart/Root/Attack" to="." method="_on_attack_state_exited"]
-[connection signal="state_physics_processing" from="StateChart/Root/Attack" to="." method="_on_attack_state_physics_processing"]
-[connection signal="state_processing" from="StateChart/Root/Attack" to="." method="_on_attack_state_processing"]
 [connection signal="animation_finished" from="Attacks_ani" to="." method="_on_attacks_ani_animation_finished"]

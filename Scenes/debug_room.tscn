@@ -10,20 +10,13 @@ position = Vector2(946, 696)
 
 [node name="Stage" parent="." instance=ExtResource("1_p85ev")]
 
-[node name="Player_1" parent="." node_paths=PackedStringArray("enemy") instance=ExtResource("2_x2mih")]
-position = Vector2(548, 704)
-slash_rating = 4.0
+[node name="B2-MD2" parent="." node_paths=PackedStringArray("enemy") instance=ExtResource("2_x2mih")]
+position = Vector2(1284, 775)
+enemy = NodePath("../B2-MD")
+
+[node name="B2-MD" parent="." node_paths=PackedStringArray("enemy") instance=ExtResource("2_x2mih")]
+position = Vector2(411, 626)
 controlled = true
-enemy = NodePath("../Player_2")
+enemy = NodePath("../B2-MD2")
 
-[node name="Player_2" parent="." node_paths=PackedStringArray("enemy") instance=ExtResource("2_x2mih")]
-position = Vector2(1169, 468)
-health = 10.0
-slash_rating = 4.0
-controlled = true
-enemy = NodePath("../Player_1")
-
-[node name="Root" parent="Player_2/StateChart" index="0"]
-initial_state = NodePath("Juggled")
-
-[editable path="Player_2"]
+[editable path="B2-MD"]

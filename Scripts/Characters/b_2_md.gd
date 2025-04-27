@@ -17,82 +17,109 @@ extends CharacterBody2D
 @export var punch_attack_rating: float = 1
 @export var punch_launch_rating: float = 0.1
 @export var punch_counter_rating: float = 1.1
+@export var punch_launch_direction: Vector2 = Vector2i(0.5, -0.5)
 @export_subgroup("Kick")
 @export var kick_attack_damage: float = 20.0
 @export var kick_attack_rating: float = 1
 @export var kick_launch_rating: float = 0.5
 @export var kick_counter_rating: float = 1.3
+@export var kick_launch_direction: Vector2 = Vector2i(0.1, -2)
 @export_subgroup("Slash")
 @export var slash_attack_damage: float = 30.0
 @export var slash_attack_rating: float = 1
 @export var slash_launch_rating: float = 0.5
 @export var slash_counter_rating: float = 1.5
+@export var slash_launch_direction: Vector2 = Vector2i(0.5, -2)
 @export_subgroup("Heavy Slash")
 @export var heavy_attack_damage: float = 40.0
 @export var heavy_attack_rating: float = 1
 @export var heavy_launch_rating: float = 1
 @export var heavy_counter_rating: float = 1.8
+@export var heavy_launch_direction: Vector2 = Vector2i(2, -5)
 @export_subgroup("Crouch Punch")
 @export var crouch_punch_attack_damage: float = 5.0
 @export var crouch_punch_attack_rating: float = 1
 @export var crouch_punch_launch_rating: float = 0.1
 @export var crouch_punch_counter_rating: float = 1.1
+@export var crouch_punch_launch_direction: Vector2 = Vector2i(0.5, -0.5)
 @export_subgroup("Crouch Kick")
 @export var crouch_kick_attack_damage: float = 15.0
 @export var crouch_kick_attack_rating: float = 1
 @export var crouch_kick_launch_rating: float = 0.3
 @export var crouch_kick_counter_rating: float = 1.3
+@export var crouch_kick_launch_direction: Vector2 = Vector2i(0.5, -1)
 @export_subgroup("Crouch Slash")
 @export var crouch_slash_attack_damage: float = 25.0
 @export var crouch_slash_attack_rating: float = 1
 @export var crouch_slash_launch_rating: float = 0.7
 @export var crouch_slash_counter_rating: float = 1.6
+@export var crouch_slash_launch_direction: Vector2 = Vector2i(1, -5)
 @export_subgroup("Crouch Heavy Slash")
 @export var crouch_heavy_attack_damage: float = 40.0
 @export var crouch_heavy_attack_rating: float = 1.0
 @export var crouch_heavy_launch_rating: float = 1.0
 @export var crouch_heavy_counter_rating: float = 2
+@export var crouch_heavy_launch_direction: Vector2 = Vector2i(1, -1)
 @export_subgroup("Air Punch")
 @export var air_punch_attack_damage: float = 10.0
 @export var air_punch_attack_rating: float = 1
 @export var air_punch_launch_rating: float = 0.1
 @export var air_punch_counter_rating: float = 1.2
+@export var air_punch_launch_direction: Vector2 = Vector2i(0.5, -0.5)
 @export_subgroup("Air Kick")
 @export var air_kick_attack_damage: float = 20.0
 @export var air_kick_attack_rating: float = 1
 @export var air_kick_launch_rating: float = 0.5
 @export var air_kick_counter_rating: float = 1.5
+@export var air_kick_launch_direction: Vector2 = Vector2i(0.5, -0.5)
 @export_subgroup("Air Slash")
 @export var air_slash_attack_damage: float = 30.0
 @export var air_slash_attack_rating: float = 1
 @export var air_slash_launch_rating: float = 0.7
 @export var air_slash_counter_rating: float = 1.7
+@export var air_slash_launch_direction: Vector2 = Vector2i(0.5, -0.5)
 @export_subgroup("Air Heavy Slash")
 @export var air_heavy_attack_damage: float = 40.0
 @export var air_heavy_attack_rating: float = 1
 @export var air_heavy_launch_rating: float = 0.7
 @export var air_heavy_counter_rating: float = 1.9
+@export var air_heavy_launch_direction: Vector2 = Vector2i(0.5, -0.5)
 @export_group("Bool stats")
 @export var fenrir_mode: bool = false
 @export var god_mode: bool = false
 @export_group("controls")
 @export var controlled: bool
-@export var state: AtomicState
 
+var launch_direction: Vector2
+
+var hit_again: bool = false
+
+var blockstun:Timer
+var hitstun:Timer
+
+var state: String
+var time: Timer
 
 var direction: Vector2
 
-
+var jump: bool = false
+var double_jump: bool = false
 
 
 var inputs: Array = [5]
 var input_movement: int
+var crouching_inputs: Array = [1, 2, 3]
+var standing_inputs: Array = [4, 5, 6]
+var jumping_input: Array = [7, 8, 9]
+
 
 @export_group("players")
 @export var enemy: CharacterBody2D
 
 var prev_box: String
 var new_box: String
+var attack: String
+var attack_connected: bool = false
 
 func check_attack():
 	pass
@@ -135,11 +162,32 @@ func get_movement_input():
 	else:
 		input_movement = 5
 
+func get_attack_input():
+	if Input.is_action_just_pressed("Punch"):
+		attack = "Punch"
+		return true
+	elif Input.is_action_just_pressed("Kick"):
+		attack = "Kick"
+		return true
+	elif Input.is_action_just_pressed("Slash"):
+		attack = "Slash"
+		return true
+	elif Input.is_action_just_pressed("Heavy"):
+		attack = "Heavy"
+		return true
+	else:
+		return false
 
+func _ready() -> void:
+	blockstun = enemy.get_child(7).get_child(0)
+	hitstun = enemy.get_child(7).get_child(1)
 
 func _physics_process(delta: float) -> void:
 	get_movement_input()
 	input_calc()
+	
+	if is_on_floor():
+		jump = false
 	
 
 func check_for_enemy():
@@ -153,6 +201,9 @@ func check_enemy_position(enemy: CharacterBody2D):
 	if enemy.global_position.x > self.global_position.x:
 		$Player_animations.flip_h = true
 		change_punch_position_right()
+		change_kick_position_right()
+		change_slash_position_right()
+		change_heavy_position_right()
 		return true
 		
 	
@@ -160,17 +211,247 @@ func check_enemy_position(enemy: CharacterBody2D):
 	elif enemy.global_position.x < self.global_position.x:
 		$Player_animations.flip_h = false
 		change_punch_position_left()
+		change_kick_position_left()
+		change_slash_position_left()
+		change_heavy_position_left()
 		return false
+
 func change_punch_position_left():
 	$Attacks/punch.position.x = -81.75
+	$Attacks/c_punch.position.x = -81.75
 func change_punch_position_right():
 	$Attacks/punch.position.x = 81.75
+	$Attacks/c_punch.position.x = 81.75
+func change_kick_position_left():
+	$Attacks/kick.position.x = -82
+	$Attacks/c_kick.position.x = -84
+func change_kick_position_right():
+	$Attacks/kick.position.x = 82
+	$Attacks/c_kick.position.x = 84
+func change_slash_position_left():
+	$Attacks/slash.position.x = -94.25
+	$Attacks/c_slash.position.x = -77.5
+func change_slash_position_right():
+	$Attacks/slash.position.x = 94.25
+	$Attacks/c_slash.position.x = 77.5
+func change_heavy_position_left():
+	$Attacks/heavy.position.x = -109.75
+	$Attacks/c_heavy.position.x = -166.25
+func change_heavy_position_right():
+	$Attacks/heavy.position.x = 109.75
+	$Attacks/c_heavy.position.x = 166.25
 
+func _on_attacking_state_entered() -> void:
+	if state == "Idle":
+		$Idle.disabled = false
+		$Hit_Box/Idle.disabled = false
+		$Grab_Box/Idle.disabled = false
+	if state == "Crouch":
+		$Crouch.disabled = false
+		$Hit_Box/Crouch.disabled = false
+		$Grab_Box/Crouch.disabled = false
+	if state == "Jump":
+		$Jump.disabled = false
+		$Hit_Box/Jump.disabled = false
+		$Grab_Box/Jump.disabled = false
+	print("attack: " + attack)
+	execute_attack(attack)
+	time = get_node_or_null("timers/" + attack.to_lower() +"/" + attack.to_lower())
+	time.start()
+func _on_attacking_state_processing(delta: float) -> void:
+	pass
+func _on_attacking_state_physics_processing(delta: float) -> void:
+	#if entered on punch
+	if attack == "Punch" and attack_connected:
+		if state == "Idle":
+			#to standing punch
+			if Input.is_action_just_pressed("Punch") and inputs[-1] in standing_inputs:
+				print("double")
+				time.stop()
+				$Attacks_ani.stop()
+				$Attacks/punch.disabled = true
+				attack = "Punch"
+				$StateChart.send_event("to_idle")
+			#to standing kick
+			elif Input.is_action_just_pressed("Kick") and inputs[-1] in standing_inputs:
+				print("gatling")
+				time.stop()
+				$Attacks_ani.stop()
+				$Attacks/punch.disabled = true
+				attack = "Kick"
+				$StateChart.send_event("to_idle")
+			#to crouching punch
+			elif Input.is_action_just_pressed("Punch") and inputs[-1] in crouching_inputs:
+				print("gatling")
+				time.stop()
+				$Attacks_ani.stop()
+				$Attacks/punch.disabled = true
+				attack = "Punch"
+				$StateChart.send_event("to_crouch")
+			#to crouching kick
+			elif Input.is_action_just_pressed("Kick") and inputs[-1] in crouching_inputs:
+				print("gatling")
+				time.stop()
+				$Attacks_ani.stop()
+				$Attacks/punch.disabled = true
+				attack = "Kick"
+				$StateChart.send_event("to_crouch")
+		if state == "Crouch":
+			#to standing punch
+			if Input.is_action_just_pressed("Punch") and inputs[-1] in standing_inputs:
+				print("gatling")
+				time.stop()
+				$Attacks_ani.stop()
+				$Attacks/c_punch.disabled = true
+				attack = "Punch"
+				$StateChart.send_event("to_idle")
+			elif Input.is_action_just_pressed("Kick") and inputs[-1] in standing_inputs:
+				print("gatling")
+				time.stop()
+				$Attacks_ani.stop()
+				$Attacks/c_punch.disabled = true
+				attack = "Kick"
+				$StateChart.send_event("to_idle")
+			elif Input.is_action_just_pressed("Punch") and inputs[-1] in crouching_inputs:
+				print("double")
+				time.stop()
+				$Attacks_ani.stop()
+				$Attacks/c_punch.disabled = true
+				attack = "Punch"
+				$StateChart.send_event("to_crouch")
+			elif Input.is_action_just_pressed("Kick") and inputs[-1] in crouching_inputs:
+				print("gatling")
+				time.stop()
+				$Attacks_ani.stop()
+				$Attacks/c_punch.disabled = true
+				attack = "Kick"
+				$StateChart.send_event("to_crouch")
+	#if attack was a kick
+	if attack == "Kick" and attack_connected:
+		if state == "Idle":
+			#to dash
+			if Input.is_action_just_pressed("Dash") and inputs[-1] == 6:
+				time.stop()
+				$Attacks_ani.stop()
+				$Attacks/kick.disabled = true
+				attack = ""
+				print("Dash cancel!")
+				$StateChart.send_event("to_dash")
+		if state == "Crouch":
+			#to standing kick
+			if Input.is_action_just_pressed("Kick") and inputs[-1] in standing_inputs:
+				print("gatling")
+				time.stop()
+				$Attacks_ani.stop()
+				$Attacks/c_kick.disabled = true
+				attack = "Kick"
+				$StateChart.send_event("to_idle")
+	if attack == "Slash" and attack_connected:
+		if state == "Idle":
+			if Input.is_action_just_pressed("Slash") and inputs[-1] in crouching_inputs:
+				print("gatling")
+				time.stop()
+				$Attacks_ani.stop()
+				$Attacks/slash.disabled = true
+				attack = "Slash"
+				$StateChart.send_event("to_crouch")
+			elif Input.is_action_just_pressed("Heavy") and inputs[-1] in standing_inputs:
+				print("gatling")
+				time.stop()
+				$Attacks_ani.stop()
+				$Attacks/slash.disabled = true
+				attack = "Heavy"
+				$StateChart.send_event("to_idle")
+			elif Input.is_action_just_pressed("Heavy") and inputs[-1] in crouching_inputs:
+				print("gatling")
+				time.stop()
+				$Attacks_ani.stop()
+				$Attacks/slash.disabled = true
+				attack = "Heavy"
+				$StateChart.send_event("to_crouch")
+			if Input.is_action_just_pressed("Dash") and inputs[-1] == 6:
+				time.stop()
+				$Attacks_ani.stop()
+				$Attacks/c_slash.disabled = true
+				attack = ""
+				print("Dash cancel!")
+				$StateChart.send_event("to_dash")
+		if state == "Crouch":
+			if Input.is_action_just_pressed("Heavy") and inputs[-1] in crouching_inputs:
+				print("gatling")
+				time.stop()
+				$Attacks_ani.stop()
+				$Attacks/c_slash.disabled = true
+				attack = "Heavy"
+				$StateChart.send_event("to_crouch")
+		else:
+			pass
+func _on_attacking_state_exited() -> void:
+	for group in $Attacks.get_groups():
+		$Attacks.remove_from_group(group)
+	$Idle.disabled = true
+	$Hit_Box/Idle.disabled = true
+	$Grab_Box/Idle.disabled = true
+	$Crouch.disabled = true
+	$Hit_Box/Crouch.disabled = true
+	$Grab_Box/Crouch.disabled = true
+	$Jump.disabled = true
+	$Hit_Box/Jump.disabled = true
+	$Grab_Box/Jump.disabled = true
 
+func _on_punch_timeout() -> void:
+	print("punch timeout")
+	attack = ""
+	attack_connected = false
+	if state == "Idle":
+		$StateChart.send_event("to_idle")
+	elif state == "Crouch":
+		$StateChart.send_event("to_crouch")
+func _on_kick_timeout() -> void:
+	print("kick timeout")
+	attack = ""
+	attack_connected = false
+	if state == "Idle":
+		$StateChart.send_event("to_idle")
+	elif state == "Crouch":
+		$StateChart.send_event("to_crouch")
+func _on_slash_timeout() -> void:
+	print("slash timeout")
+	attack = ""
+	attack_connected = false
+	if state == "Idle":
+		$StateChart.send_event("to_idle")
+	elif state == "Crouch":
+		$StateChart.send_event("to_crouch")
+func _on_heavy_timeout() -> void:
+	print("heavy timeout")
+	attack = ""
+	attack_connected = false
+	if state == "Idle":
+		$StateChart.send_event("to_idle")
+	elif state == "Crouch":
+		$StateChart.send_event("to_crouch")
 
-
+#different for every character
+func attack_loop():
+	if attack == "Punch":
+		return true
+	elif attack == "Kick":
+		return true
+	elif attack == "Slash":
+		return true
+	elif attack == "Heavy":
+		return true
+	else:
+		return false
 
 func _on_idle_state_entered() -> void:
+	juggle_rating = 2.0
+	state = "Idle"
+	if attack_loop():
+		$StateChart.send_event("to_attacking")
+	if jump == true and !is_on_floor():
+		$StateChart.send_event("to_jump")
 	$Idle.disabled = false
 	$Hit_Box/Idle.disabled = false
 	$Grab_Box/Idle.disabled = false
@@ -195,15 +476,13 @@ func _on_idle_state_processing(delta: float) -> void:
 				return
 			else:
 				$StateChart.send_event("to_crouch")
-		
-		#if state set to death
-		if state == $StateChart/Root/Death:
-			$StateChart.send_event("to_death")
-		
 func _on_idle_state_physics_processing(delta: float) -> void:
 	#if enemy is there
 	if check_for_enemy():
 		check_enemy_position(enemy)
+	if controlled:
+		if get_attack_input():
+			$StateChart.send_event("to_attacking")
 func _on_idle_state_exited() -> void:
 	$Idle.disabled = true
 	$Hit_Box/Idle.disabled = true
@@ -213,6 +492,7 @@ func _on_idle_state_exited() -> void:
 
 
 func _on_walk_state_entered() -> void:
+	state = "Idle"
 	$Idle.disabled = false
 	$Hit_Box/Idle.disabled = false
 	$Grab_Box/Idle.disabled = false
@@ -244,6 +524,9 @@ func _on_walk_state_physics_processing(delta: float) -> void:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 	check_enemy_position(enemy)
 	move_and_slide()
+	if get_attack_input():
+		$Player_animations.play("Idle")
+		$StateChart.send_event("to_attacking")
 func _on_walk_state_exited() -> void:
 	$Idle.disabled = true
 	$Hit_Box/Idle.disabled = true
@@ -251,10 +534,11 @@ func _on_walk_state_exited() -> void:
 	prev_box = "Idle"
 
 func _on_jump_state_entered() -> void:
+	state = "Jump"
 	$Jump.disabled = false
 	$Hit_Box/Jump.disabled = false
 	$Grab_Box/Jump.disabled = false
-	
+	#set bools accordingly
 	print("jump")
 	$Player_animations.play("Jump")
 	#if idle
@@ -274,8 +558,9 @@ func _on_jump_state_processing(delta: float) -> void:
 			$StateChart.send_event("to_idle")
 		elif abs(velocity.x) > 0:
 			$StateChart.send_event("to_walk")
-	if Input.is_action_just_pressed("Jump"):
-		$StateChart.send_event("to_double_jump")
+	if Input.is_action_just_pressed("Jump") and jump == false:
+		jump = true
+		$StateChart.send_event("to_idle")
 func _on_jump_state_physics_processing(delta: float) -> void:
 	velocity += get_gravity()
 	velocity.x = (direction.x * 5) * SPEED * delta
@@ -286,41 +571,13 @@ func _on_jump_state_exited() -> void:
 	$Grab_Box/Jump.disabled = true
 	prev_box = "Jump"
 
-func _on_double_jump_state_entered() -> void:
-	$Jump.disabled = false
-	$Hit_Box/Jump.disabled = false
-	$Grab_Box/Jump.disabled = false
-	
-	print("double jump")
-	#if idle
-	if inputs[-1] == 8:
-		direction.x = 0
-	#if moving left
-	if inputs[-1] == 7:
-		direction.x = -1
-	#if moving right
-	if inputs[-1] == 9:
-		direction.x = 1
-	velocity.y = JUMP_VELOCITY
-	check_enemy_position(enemy)
-func _on_double_jump_state_processing(delta: float) -> void:
-	if self.is_on_floor():
-		#if not moving on floor
-		if velocity.x == 0:
-			$StateChart.send_event("to_idle")
-		elif abs(velocity.x) > 0:
-			$StateChart.send_event("to_walk")
-func _on_double_jump_state_physics_processing(delta: float) -> void:
-	velocity += get_gravity()
-	velocity.x = (direction.x * 5) * SPEED * delta
-	move_and_slide()
-func _on_double_jump_state_exited() -> void:
-	$Jump.disabled = true
-	$Hit_Box/Jump.disabled = true
-	$Grab_Box/Jump.disabled = true
-	prev_box = "Jump"
+
 
 func _on_crouch_state_entered() -> void:
+	juggle_rating = 2.0
+	state = "Crouch"
+	if attack_loop():
+		$StateChart.send_event("to_attacking")
 	$Crouch.disabled = false
 	$Hit_Box/Crouch.disabled = false
 	$Grab_Box/Crouch.disabled = false
@@ -336,6 +593,8 @@ func _on_crouch_state_physics_processing(delta: float) -> void:
 	velocity = Vector2.ZERO
 	check_enemy_position(enemy)
 	move_and_slide()
+	if get_attack_input():
+		$StateChart.send_event("to_attacking")
 func _on_crouch_state_exited() -> void:
 	$Crouch.disabled = true
 	$Hit_Box/Crouch.disabled = true
@@ -343,6 +602,7 @@ func _on_crouch_state_exited() -> void:
 	prev_box = "Crouch"
 
 func _on_step_dash_state_entered() -> void:
+	attack_connected = false
 	$Idle.disabled = false
 	$Hit_Box/Idle.disabled = false
 	$Grab_Box/Idle.disabled = false
@@ -370,43 +630,49 @@ func _on_step_dash_state_exited() -> void:
 
 func _on_hitstun_state_entered() -> void:
 	print("hit")
+	print(juggle_rating)
+	$Idle.disabled = false
+	$Hit_Box/Idle.disabled = false
+	$timers/hitstun.start()
 func _on_hitstun_state_processing(delta: float) -> void:
 	#if health = 0
-	if health <= 0:
-		$StateChart.send_event("to_death")
+	#if health <= 0:
+	#	pass
+	if juggle_rating <= 0:
+		print("rating threshold")
+		$timers/hitstun.stop()
+		$StateChart.send_event("to_juggled")
 func _on_hitstun_state_physics_processing(delta: float) -> void:
-	pass # Replace with function body.
+	if hit_again:
+		$timers/hitstun.stop()
+		$timers/hitstun.start(hitstun.wait_time)
+		print("restarted")
+		hit_again = false
 func _on_hitstun_state_exited() -> void:
 	pass # Replace with function body.
+func _on_hitstun_timeout() -> void:
+	$StateChart.send_event("to_idle")
 
-func _on_juggled_state_entered() -> void:
+
+func _on_juggled_state_entered(delta: float) -> void:
 	print("juggled")
+	velocity = (launch_direction * 1000) * SPEED * delta
 func _on_juggled_state_processing(delta: float) -> void:
 	#if landed and has health
-	if health > 0 and is_on_floor():
-		$StateChart.send_event("to_knocked_down")
+	#if health > 0 and is_on_floor():
+	#	$StateChart.send_event("to_knocked_down")
 	
 	#if health = 0 and lands
 	if health <= 0 and is_on_floor():
-		$StateChart.send_event("to_death")
+		pass
 func _on_juggled_state_physics_processing(delta: float) -> void:
 	velocity += get_gravity()
-	velocity.x = (direction.x * 3) * SPEED * delta
+	velocity = (launch_direction * 1000) * SPEED * delta
 	move_and_slide()
 func _on_juggled_state_exited() -> void:
-	pass # Replace with function body.
+	juggle_rating = 2.0
 
 
-func _on_death_state_entered() -> void:
-	print("death")
-	self.set_collision_layer_value(20, false)
-func _on_death_state_processing(delta: float) -> void:
-	pass # Replace with function body.
-func _on_death_state_physics_processing(delta: float) -> void:
-	velocity += get_gravity()
-	move_and_slide()
-func _on_death_state_exited() -> void:
-	pass # Replace with function body.
 
 
 func _on_knocked_down_state_entered() -> void:
@@ -419,11 +685,70 @@ func _on_knocked_down_state_exited() -> void:
 	pass # Replace with function body.
 
 
-func _on_attack_state_entered() -> void:
-	print("attack")
-func _on_attack_state_processing(delta: float) -> void:
-	pass # Replace with function body.
-func _on_attack_state_physics_processing(delta: float) -> void:
-	pass # Replace with function body.
-func _on_attack_state_exited() -> void:
-	prev_box = prev_box
+
+
+func execute_attack(attack_name: String):
+	if attack_name == "Punch":
+		if state == "Idle":
+			$Attacks.add_to_group("Mid")
+			$Attacks.add_to_group("Punch")
+			$Attacks_ani.play("punch")
+		elif state == "Crouch":
+			$Attacks.add_to_group("Low")
+			$Attacks.add_to_group("Punch")
+			$Attacks_ani.play("c_punch")
+	elif attack_name == "Kick":
+		if state == "Idle":
+			$Attacks.add_to_group("Mid")
+			$Attacks.add_to_group("Kick")
+			$Attacks_ani.play("kick")
+		elif state == "Crouch":
+			$Attacks.add_to_group("Low")
+			$Attacks.add_to_group("Kick")
+			$Attacks_ani.play("c_kick")
+	elif attack_name == "Slash":
+		if state == "Idle":
+			$Attacks.add_to_group("Mid")
+			$Attacks.add_to_group("Slash")
+			$Attacks_ani.play("slash")
+		elif state == "Crouch":
+			$Attacks.add_to_group("Mid")
+			$Attacks.add_to_group("Slash")
+			$Attacks_ani.play("c_slash")
+	elif attack_name == "Heavy":
+		if state == "Idle":
+			$Attacks.add_to_group("Mid")
+			$Attacks.add_to_group("Heavy")
+			$Attacks_ani.play("heavy")
+		elif state == "Crouch":
+			$Attacks.add_to_group("Low")
+			$Attacks.add_to_group("Heavy")
+			$Attacks_ani.play("c_heavy")
+			pass
+
+
+func _on_attacks_area_entered(area: Area2D) -> void:
+	if "Player" in area.get_groups():
+		print("hit")
+		attack_connected = true
+
+func _on_hit_box_area_entered(area: Area2D):
+	print("entered")
+	var attack_type = area.get_groups()
+	var attack_dmg: float
+	var launch_dmg: float
+	if "B2-MD" in enemy.get_groups():
+		if "Punch" in attack_type:
+			attack_dmg = 40
+			launch_dmg = 0.1
+			blockstun.wait_time = 0.7
+			hitstun.wait_time = 1.1
+			launch_direction = punch_launch_direction
+			hit_again = true
+	var block_type = self.get_groups()
+	if "Mid" in attack_type:
+		if "Blocking" not in block_type:
+			health -= attack_dmg
+			juggle_rating -= launch_dmg
+			print(health)
+			$StateChart.send_event("to_hitstun")

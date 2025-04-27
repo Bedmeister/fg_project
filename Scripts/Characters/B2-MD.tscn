@@ -1,21 +1,21 @@
-[gd_scene load_steps=34 format=3 uid="uid://bvw7u554liayn"]
+[gd_scene load_steps=24 format=3 uid="uid://cshi05yjpsisi"]
 
-[ext_resource type="Script" path="res://Scripts/Characters/b_2_md.gd" id="1_8svha"]
-[ext_resource type="Texture2D" uid="uid://cupebuxoalkhd" path="res://Assets/Sprites/Characters/B2-MD/Idle/Idle0.png" id="2_ighlx"]
-[ext_resource type="Script" path="res://godot_state_charts/state_chart.gd" id="3_0nucv"]
-[ext_resource type="Texture2D" uid="uid://cnpyl2bnwejc7" path="res://Assets/Sprites/Characters/B2-MD/Jump/Jump0.png" id="3_6w6uw"]
-[ext_resource type="Texture2D" uid="uid://duvdg3smvn7rh" path="res://Assets/Sprites/Characters/B2-MD/walk/walk0.png" id="3_31ce8"]
-[ext_resource type="Texture2D" uid="uid://cks03rt48iaxm" path="res://Assets/Sprites/Characters/B2-MD/walk/walk1.png" id="4_qhvw7"]
-[ext_resource type="Script" path="res://godot_state_charts/compound_state.gd" id="4_w15ok"]
-[ext_resource type="Script" path="res://godot_state_charts/atomic_state.gd" id="5_yfjpd"]
-[ext_resource type="Script" path="res://godot_state_charts/transition.gd" id="6_4ycrl"]
-[ext_resource type="Script" path="res://godot_state_charts/expression_guard.gd" id="10_k58fu"]
+[ext_resource type="Script" path="res://Scripts/Characters/b_2_md.gd" id="1_r3xcv"]
+[ext_resource type="Texture2D" uid="uid://cupebuxoalkhd" path="res://Assets/Sprites/Characters/B2-MD/Idle/Idle0.png" id="2_glbcj"]
+[ext_resource type="Texture2D" uid="uid://cnpyl2bnwejc7" path="res://Assets/Sprites/Characters/B2-MD/Jump/Jump0.png" id="3_5j4cm"]
+[ext_resource type="Texture2D" uid="uid://duvdg3smvn7rh" path="res://Assets/Sprites/Characters/B2-MD/walk/walk0.png" id="4_jr60e"]
+[ext_resource type="Texture2D" uid="uid://cks03rt48iaxm" path="res://Assets/Sprites/Characters/B2-MD/walk/walk1.png" id="5_0lji5"]
+[ext_resource type="Script" path="res://godot_state_charts/state_chart.gd" id="6_asq2q"]
+[ext_resource type="Script" path="res://godot_state_charts/compound_state.gd" id="7_oymh0"]
+[ext_resource type="Script" path="res://godot_state_charts/atomic_state.gd" id="8_dk0tw"]
+[ext_resource type="Script" path="res://godot_state_charts/transition.gd" id="9_05phb"]
+[ext_resource type="Script" path="res://godot_state_charts/expression_guard.gd" id="10_6txbq"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_mpfo3"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("2_ighlx")
+"texture": ExtResource("2_glbcj")
 }],
 "loop": true,
 "name": &"Idle",
@@ -23,7 +23,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("3_6w6uw")
+"texture": ExtResource("3_5j4cm")
 }],
 "loop": true,
 "name": &"Jump",
@@ -31,16 +31,16 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("3_31ce8")
+"texture": ExtResource("4_jr60e")
 }, {
 "duration": 1.0,
-"texture": ExtResource("2_ighlx")
+"texture": ExtResource("2_glbcj")
 }, {
 "duration": 1.0,
-"texture": ExtResource("4_qhvw7")
+"texture": ExtResource("5_0lji5")
 }, {
 "duration": 1.0,
-"texture": ExtResource("2_ighlx")
+"texture": ExtResource("2_glbcj")
 }],
 "loop": true,
 "name": &"Walk",
@@ -65,23 +65,14 @@ size = Vector2(84.5, 47)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ewvth"]
 size = Vector2(84, 190)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_8l6ff"]
-size = Vector2(84, 92)
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_sjscd"]
 size = Vector2(115.5, 152)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_i50o7"]
-size = Vector2(149, 192)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cifkf"]
 size = Vector2(144.5, 103)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_rqrue"]
-size = Vector2(257.5, 103)
-
 [sub_resource type="Resource" id="Resource_gd8lg"]
-script = ExtResource("10_k58fu")
+script = ExtResource("10_6txbq")
 expression = "if double_jump == false and jump == true"
 
 [sub_resource type="Animation" id="Animation_4tpb7"]
@@ -98,184 +89,6 @@ tracks/0/keys = {
 "update": 1,
 "values": [true]
 }
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Attacks/kick:disabled")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Attacks/slash:disabled")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("Attacks/heavy:disabled")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("Attacks/c_punch:disabled")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/5/type = "value"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("Attacks/c_heavy:disabled")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/6/type = "value"
-tracks/6/imported = false
-tracks/6/enabled = true
-tracks/6/path = NodePath("Attacks/c_kick:disabled")
-tracks/6/interp = 1
-tracks/6/loop_wrap = true
-tracks/6/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/7/type = "value"
-tracks/7/imported = false
-tracks/7/enabled = true
-tracks/7/path = NodePath("Attacks/c_slash:disabled")
-tracks/7/interp = 1
-tracks/7/loop_wrap = true
-tracks/7/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-
-[sub_resource type="Animation" id="Animation_jusyw"]
-resource_name = "c_heavy"
-length = 4.0
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Attacks/c_heavy:disabled")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0.7, 1.46667),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [false, true]
-}
-
-[sub_resource type="Animation" id="Animation_2ykaj"]
-resource_name = "c_kick"
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Attacks/c_kick:disabled")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0.2, 0.466667),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [false, true]
-}
-
-[sub_resource type="Animation" id="Animation_6s4gd"]
-resource_name = "c_punch"
-length = 0.5
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Attacks/c_punch:disabled")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0.0667, 0.2667),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [false, true]
-}
-
-[sub_resource type="Animation" id="Animation_ews80"]
-resource_name = "c_slash"
-length = 2.0
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Attacks/c_slash:disabled")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0.3, 1),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [false, true]
-}
-
-[sub_resource type="Animation" id="Animation_0hqde"]
-resource_name = "heavy"
-length = 4.0
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Attacks/heavy:disabled")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0.7, 1.46667),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [false, true]
-}
-
-[sub_resource type="Animation" id="Animation_wa63w"]
-resource_name = "kick"
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Attacks/kick:disabled")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0.2, 0.466667),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [false, true]
-}
 
 [sub_resource type="Animation" id="Animation_vvcr8"]
 resource_name = "punch"
@@ -287,23 +100,7 @@ tracks/0/path = NodePath("Attacks/punch:disabled")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0.0667, 0.2667),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [false, true]
-}
-
-[sub_resource type="Animation" id="Animation_yyunh"]
-resource_name = "slash"
-length = 2.0
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Attacks/slash:disabled")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0.3, 1),
+"times": PackedFloat32Array(0.133333, 0.366667),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [false, true]
@@ -312,20 +109,13 @@ tracks/0/keys = {
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_ag4xd"]
 _data = {
 "RESET": SubResource("Animation_4tpb7"),
-"c_heavy": SubResource("Animation_jusyw"),
-"c_kick": SubResource("Animation_2ykaj"),
-"c_punch": SubResource("Animation_6s4gd"),
-"c_slash": SubResource("Animation_ews80"),
-"heavy": SubResource("Animation_0hqde"),
-"kick": SubResource("Animation_wa63w"),
-"punch": SubResource("Animation_vvcr8"),
-"slash": SubResource("Animation_yyunh")
+"punch": SubResource("Animation_vvcr8")
 }
 
-[node name="B2-MD" type="CharacterBody2D" groups=["B2-MD", "Player"]]
+[node name="B2-MD" type="CharacterBody2D" groups=["Player"]]
 collision_layer = 524288
 collision_mask = 524288
-script = ExtResource("1_8svha")
+script = ExtResource("1_r3xcv")
 
 [node name="Player_animations" type="AnimatedSprite2D" parent="."]
 position = Vector2(1, -3)
@@ -347,9 +137,9 @@ position = Vector2(1, 73.5)
 shape = SubResource("RectangleShape2D_m6p6v")
 debug_color = Color(0.622259, 0.365741, 5.77569e-07, 0.42)
 
-[node name="Hit_Box" type="Area2D" parent="." groups=["Player"]]
+[node name="Hit_Box" type="Area2D" parent="."]
 collision_layer = 16
-collision_mask = 16
+collision_mask = 0
 
 [node name="Idle" type="CollisionShape2D" parent="Hit_Box"]
 position = Vector2(0.5, 0)
@@ -366,7 +156,7 @@ position = Vector2(0.5, 77)
 shape = SubResource("RectangleShape2D_4g3e0")
 debug_color = Color(0.72549, 0.105882, 0.0627451, 1)
 
-[node name="Grab_Box" type="Area2D" parent="." groups=["Player"]]
+[node name="Grab_Box" type="Area2D" parent="."]
 disable_mode = 1
 collision_layer = 512
 collision_mask = 512
@@ -386,8 +176,8 @@ position = Vector2(2, 79.5)
 shape = SubResource("RectangleShape2D_m6p6v")
 debug_color = Color(0.622259, 0.365741, 5.77569e-07, 0.42)
 
-[node name="Attacks" type="Area2D" parent="." groups=["Attack"]]
-collision_layer = 16
+[node name="Attacks" type="Area2D" parent="."]
+collision_layer = 0
 collision_mask = 16
 
 [node name="punch" type="CollisionShape2D" parent="Attacks"]
@@ -396,57 +186,25 @@ shape = SubResource("RectangleShape2D_xxxf5")
 disabled = true
 debug_color = Color(0, 1, 0, 0.419608)
 
-[node name="c_punch" type="CollisionShape2D" parent="Attacks" groups=["Mid"]]
-position = Vector2(-81.75, 23)
-shape = SubResource("RectangleShape2D_xxxf5")
-disabled = true
-debug_color = Color(0, 1, 0, 0.419608)
-
-[node name="kick" type="CollisionShape2D" parent="Attacks" groups=["Mid"]]
+[node name="kick" type="CollisionShape2D" parent="Attacks"]
 position = Vector2(-82, 57)
 shape = SubResource("RectangleShape2D_ewvth")
 disabled = true
 debug_color = Color(0, 1, 0, 0.419608)
 
-[node name="c_kick" type="CollisionShape2D" parent="Attacks" groups=["Mid"]]
-position = Vector2(-84, 106)
-shape = SubResource("RectangleShape2D_8l6ff")
-disabled = true
-debug_color = Color(0, 1, 0, 0.419608)
-
-[node name="slash" type="CollisionShape2D" parent="Attacks" groups=["Mid"]]
+[node name="slash" type="CollisionShape2D" parent="Attacks"]
 position = Vector2(-94.25, -29)
 shape = SubResource("RectangleShape2D_sjscd")
 disabled = true
 debug_color = Color(0, 1, 0, 0.419608)
 
-[node name="c_slash" type="CollisionShape2D" parent="Attacks" groups=["Mid"]]
-position = Vector2(-77.5, 37)
-shape = SubResource("RectangleShape2D_i50o7")
-disabled = true
-debug_color = Color(0, 1, 0, 0.419608)
-
-[node name="heavy" type="CollisionShape2D" parent="Attacks" groups=["Mid"]]
+[node name="heavy" type="CollisionShape2D" parent="Attacks"]
 position = Vector2(-109.75, -52.5)
 shape = SubResource("RectangleShape2D_cifkf")
 disabled = true
 debug_color = Color(0, 1, 0, 0.419608)
 
-[node name="c_heavy" type="CollisionShape2D" parent="Attacks" groups=["Mid"]]
-position = Vector2(-166.25, 93)
-shape = SubResource("RectangleShape2D_rqrue")
-disabled = true
-debug_color = Color(0, 1, 0, 0.419608)
-
 [node name="timers" type="Node" parent="."]
-
-[node name="blockstun" type="Timer" parent="timers"]
-process_callback = 0
-one_shot = true
-
-[node name="hitstun" type="Timer" parent="timers"]
-process_callback = 0
-one_shot = true
 
 [node name="dash" type="Timer" parent="timers"]
 process_callback = 0
@@ -462,259 +220,221 @@ one_shot = true
 
 [node name="kick" type="Node" parent="timers"]
 
-[node name="kick" type="Timer" parent="timers/kick"]
-process_callback = 0
-one_shot = true
-
 [node name="slash" type="Node" parent="timers"]
-
-[node name="slash" type="Timer" parent="timers/slash"]
-process_callback = 0
-wait_time = 2.0
-one_shot = true
 
 [node name="heavy" type="Node" parent="timers"]
 
-[node name="heavy" type="Timer" parent="timers/heavy"]
-process_callback = 0
-wait_time = 4.0
-one_shot = true
-
 [node name="StateChart" type="Node" parent="."]
-script = ExtResource("3_0nucv")
+script = ExtResource("6_asq2q")
 
 [node name="Root" type="Node" parent="StateChart"]
-script = ExtResource("4_w15ok")
+script = ExtResource("7_oymh0")
 initial_state = NodePath("Jump")
 
 [node name="Idle" type="Node" parent="StateChart/Root"]
-script = ExtResource("5_yfjpd")
+script = ExtResource("8_dk0tw")
 
 [node name="Walk" type="Node" parent="StateChart/Root/Idle"]
-script = ExtResource("6_4ycrl")
+script = ExtResource("9_05phb")
 to = NodePath("../../Walk")
 event = &"to_walk"
 delay_in_seconds = "0.0"
 
 [node name="Jump" type="Node" parent="StateChart/Root/Idle"]
-script = ExtResource("6_4ycrl")
+script = ExtResource("9_05phb")
 to = NodePath("../../Jump")
 event = &"to_jump"
 delay_in_seconds = "0.0"
 
 [node name="Crouch" type="Node" parent="StateChart/Root/Idle"]
-script = ExtResource("6_4ycrl")
+script = ExtResource("9_05phb")
 to = NodePath("../../Crouch")
 event = &"to_crouch"
 delay_in_seconds = "0.0"
 
 [node name="Hitstun" type="Node" parent="StateChart/Root/Idle"]
-script = ExtResource("6_4ycrl")
+script = ExtResource("9_05phb")
 to = NodePath("../../Hitstun")
 event = &"to_hitstun"
 delay_in_seconds = "0.0"
 
 [node name="Juggled" type="Node" parent="StateChart/Root/Idle"]
-script = ExtResource("6_4ycrl")
+script = ExtResource("9_05phb")
 to = NodePath("../../Juggled")
 event = &"to_juggled"
 delay_in_seconds = "0.0"
 
 [node name="Attack" type="Node" parent="StateChart/Root/Idle"]
-script = ExtResource("6_4ycrl")
+script = ExtResource("9_05phb")
 to = NodePath("../../Attacking")
 event = &"to_attacking"
 delay_in_seconds = "0.0"
 
 [node name="Walk" type="Node" parent="StateChart/Root"]
-script = ExtResource("5_yfjpd")
+script = ExtResource("8_dk0tw")
 
 [node name="Idle" type="Node" parent="StateChart/Root/Walk"]
-script = ExtResource("6_4ycrl")
+script = ExtResource("9_05phb")
 to = NodePath("../../Idle")
 event = &"to_idle"
 delay_in_seconds = "0.0"
 
 [node name="Jump" type="Node" parent="StateChart/Root/Walk"]
-script = ExtResource("6_4ycrl")
+script = ExtResource("9_05phb")
 to = NodePath("../../Jump")
 event = &"to_jump"
 delay_in_seconds = "0.0"
 
 [node name="Crouch" type="Node" parent="StateChart/Root/Walk"]
-script = ExtResource("6_4ycrl")
+script = ExtResource("9_05phb")
 to = NodePath("../../Crouch")
 event = &"to_crouch"
 delay_in_seconds = "0.0"
 
 [node name="Step-Dash" type="Node" parent="StateChart/Root/Walk"]
-script = ExtResource("6_4ycrl")
+script = ExtResource("9_05phb")
 to = NodePath("../../Step-Dash")
 event = &"to_dash"
 delay_in_seconds = "0.0"
 
 [node name="Hitstun" type="Node" parent="StateChart/Root/Walk"]
-script = ExtResource("6_4ycrl")
+script = ExtResource("9_05phb")
 to = NodePath("../../Hitstun")
 event = &"to_hitstun"
 delay_in_seconds = "0.0"
 
 [node name="Juggled" type="Node" parent="StateChart/Root/Walk"]
-script = ExtResource("6_4ycrl")
+script = ExtResource("9_05phb")
 to = NodePath("../../Juggled")
 event = &"to_juggled"
 delay_in_seconds = "0.0"
 
 [node name="Attack" type="Node" parent="StateChart/Root/Walk"]
-script = ExtResource("6_4ycrl")
+script = ExtResource("9_05phb")
 to = NodePath("../../Attacking")
 event = &"to_attacking"
 delay_in_seconds = "0.0"
 
 [node name="Crouch" type="Node" parent="StateChart/Root"]
-script = ExtResource("5_yfjpd")
+script = ExtResource("8_dk0tw")
 
 [node name="Idle" type="Node" parent="StateChart/Root/Crouch"]
-script = ExtResource("6_4ycrl")
+script = ExtResource("9_05phb")
 to = NodePath("../../Idle")
 event = &"to_idle"
 delay_in_seconds = "0.0"
 
 [node name="Hitstun" type="Node" parent="StateChart/Root/Crouch"]
-script = ExtResource("6_4ycrl")
+script = ExtResource("9_05phb")
 to = NodePath("../../Hitstun")
 event = &"to_hitstun"
 delay_in_seconds = "0.0"
 
 [node name="Juggled" type="Node" parent="StateChart/Root/Crouch"]
-script = ExtResource("6_4ycrl")
+script = ExtResource("9_05phb")
 to = NodePath("../../Juggled")
 event = &"to_juggled"
 delay_in_seconds = "0.0"
 
 [node name="Attack" type="Node" parent="StateChart/Root/Crouch"]
-script = ExtResource("6_4ycrl")
-to = NodePath("../../Attacking")
-event = &"to_attacking"
+script = ExtResource("9_05phb")
+to = NodePath("..")
+event = &"to_attack"
 delay_in_seconds = "0.0"
 
 [node name="Jump" type="Node" parent="StateChart/Root"]
-script = ExtResource("5_yfjpd")
+script = ExtResource("8_dk0tw")
 
 [node name="Idle" type="Node" parent="StateChart/Root/Jump"]
-script = ExtResource("6_4ycrl")
+script = ExtResource("9_05phb")
 to = NodePath("../../Idle")
 event = &"to_idle"
 delay_in_seconds = "0.0"
 
 [node name="Walk" type="Node" parent="StateChart/Root/Jump"]
-script = ExtResource("6_4ycrl")
+script = ExtResource("9_05phb")
 to = NodePath("../../Walk")
 event = &"to_walk"
 delay_in_seconds = "0.0"
 
 [node name="Juggled" type="Node" parent="StateChart/Root/Jump"]
-script = ExtResource("6_4ycrl")
+script = ExtResource("9_05phb")
 to = NodePath("../../Juggled")
 event = &"to_juggled"
 delay_in_seconds = "0.0"
 
 [node name="Attack" type="Node" parent="StateChart/Root/Jump"]
-script = ExtResource("6_4ycrl")
+script = ExtResource("9_05phb")
 to = NodePath("..")
 event = &"to_attack"
 delay_in_seconds = "0.0"
 
 [node name="Jump" type="Node" parent="StateChart/Root/Jump"]
-script = ExtResource("6_4ycrl")
+script = ExtResource("9_05phb")
 to = NodePath("..")
 event = &"to_jump"
 guard = SubResource("Resource_gd8lg")
 delay_in_seconds = "0.0"
 
 [node name="Step-Dash" type="Node" parent="StateChart/Root"]
-script = ExtResource("5_yfjpd")
+script = ExtResource("8_dk0tw")
 
 [node name="Idle" type="Node" parent="StateChart/Root/Step-Dash"]
-script = ExtResource("6_4ycrl")
+script = ExtResource("9_05phb")
 to = NodePath("../../Idle")
 event = &"to_idle"
 delay_in_seconds = "0.0"
 
 [node name="Hitstun" type="Node" parent="StateChart/Root/Step-Dash"]
-script = ExtResource("6_4ycrl")
+script = ExtResource("9_05phb")
 to = NodePath("../../Hitstun")
 event = &"to_hitstun"
 delay_in_seconds = "0.0"
 
 [node name="Juggled" type="Node" parent="StateChart/Root/Step-Dash"]
-script = ExtResource("6_4ycrl")
+script = ExtResource("9_05phb")
 to = NodePath("../../Juggled")
 event = &"to_juggled"
 delay_in_seconds = "0.0"
 
 [node name="Attack" type="Node" parent="StateChart/Root/Step-Dash"]
-script = ExtResource("6_4ycrl")
+script = ExtResource("9_05phb")
 to = NodePath("..")
 event = &"to_attack"
 delay_in_seconds = "0.0"
 
 [node name="Hitstun" type="Node" parent="StateChart/Root"]
-script = ExtResource("5_yfjpd")
+script = ExtResource("8_dk0tw")
 
 [node name="Idle" type="Node" parent="StateChart/Root/Hitstun"]
-script = ExtResource("6_4ycrl")
+script = ExtResource("9_05phb")
 to = NodePath("../../Idle")
 event = &"to_idle"
 delay_in_seconds = "0.0"
 
-[node name="Juggled" type="Node" parent="StateChart/Root/Hitstun"]
-script = ExtResource("6_4ycrl")
-to = NodePath("../../Juggled")
-event = &"to_juggled"
-delay_in_seconds = "0.0"
-
 [node name="Juggled" type="Node" parent="StateChart/Root"]
-script = ExtResource("5_yfjpd")
+script = ExtResource("8_dk0tw")
 
 [node name="Idle" type="Node" parent="StateChart/Root/Juggled"]
-script = ExtResource("6_4ycrl")
+script = ExtResource("9_05phb")
 to = NodePath("../../Idle")
 event = &"to_idle"
 delay_in_seconds = "0.0"
 
 [node name="Knocked_Down" type="Node" parent="StateChart/Root/Juggled"]
-script = ExtResource("6_4ycrl")
+script = ExtResource("9_05phb")
 to = NodePath("../../Knocked_Down")
 event = &"to_knocked_down"
 delay_in_seconds = "0.0"
 
 [node name="Attacking" type="Node" parent="StateChart/Root"]
-script = ExtResource("5_yfjpd")
-
-[node name="Idle" type="Node" parent="StateChart/Root/Attacking"]
-script = ExtResource("6_4ycrl")
-to = NodePath("../../Idle")
-event = &"to_idle"
-delay_in_seconds = "0.0"
-
-[node name="Crouch" type="Node" parent="StateChart/Root/Attacking"]
-script = ExtResource("6_4ycrl")
-to = NodePath("../../Crouch")
-event = &"to_crouch"
-delay_in_seconds = "0.0"
-
-[node name="Dash" type="Node" parent="StateChart/Root/Attacking"]
-script = ExtResource("6_4ycrl")
-to = NodePath("../../Step-Dash")
-event = &"to_dash"
-delay_in_seconds = "0.0"
+script = ExtResource("8_dk0tw")
 
 [node name="Knocked_Down" type="Node" parent="StateChart/Root"]
-script = ExtResource("5_yfjpd")
+script = ExtResource("8_dk0tw")
 
 [node name="Idle" type="Node" parent="StateChart/Root/Knocked_Down"]
-script = ExtResource("6_4ycrl")
+script = ExtResource("9_05phb")
 to = NodePath("../../Idle")
 event = &"to_idle"
 delay_in_seconds = "0.0"
@@ -724,14 +444,8 @@ libraries = {
 "": SubResource("AnimationLibrary_ag4xd")
 }
 
-[connection signal="area_entered" from="Hit_Box" to="." method="_on_hit_box_area_entered"]
-[connection signal="area_entered" from="Attacks" to="." method="_on_attacks_area_entered"]
-[connection signal="timeout" from="timers/hitstun" to="." method="_on_hitstun_timeout"]
 [connection signal="timeout" from="timers/dash" to="." method="_on_timer_timeout"]
 [connection signal="timeout" from="timers/punch/punch" to="." method="_on_punch_timeout"]
-[connection signal="timeout" from="timers/kick/kick" to="." method="_on_kick_timeout"]
-[connection signal="timeout" from="timers/slash/slash" to="." method="_on_slash_timeout"]
-[connection signal="timeout" from="timers/heavy/heavy" to="." method="_on_heavy_timeout"]
 [connection signal="state_entered" from="StateChart/Root/Idle" to="." method="_on_idle_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Idle" to="." method="_on_idle_state_exited"]
 [connection signal="state_physics_processing" from="StateChart/Root/Idle" to="." method="_on_idle_state_physics_processing"]
