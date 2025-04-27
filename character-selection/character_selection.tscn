@@ -1,12 +1,13 @@
 [gd_scene load_steps=3 format=3 uid="uid://ri6mie8nrxcv"]
 
-[ext_resource type="Script" path="res://character_selection.gd" id="1_f5lus"]
-[ext_resource type="Texture2D" uid="uid://blcw8gkq4issc" path="res://CHS background.jpeg" id="1_k7me4"]
+[ext_resource type="Script" path="res://character-selection/character_selection.gd" id="1_f5lus"]
+[ext_resource type="Texture2D" uid="uid://blcw8gkq4issc" path="res://character-selection/CHS background.jpeg" id="1_k7me4"]
 
 [node name="Character_selection" type="Node2D"]
 script = ExtResource("1_f5lus")
 
 [node name="TextureRect" type="TextureRect" parent="."]
+texture_filter = 1
 anchors_preset = -1
 anchor_right = 0.5
 anchor_bottom = 0.5
