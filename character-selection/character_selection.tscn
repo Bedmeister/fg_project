@@ -1,0 +1,46 @@
+[gd_scene load_steps=3 format=3 uid="uid://ri6mie8nrxcv"]
+
+[ext_resource type="Script" path="res://character_selection.gd" id="1_f5lus"]
+[ext_resource type="Texture2D" uid="uid://blcw8gkq4issc" path="res://CHS background.jpeg" id="1_k7me4"]
+
+[node name="Character_selection" type="Node2D"]
+script = ExtResource("1_f5lus")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+anchors_preset = -1
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -1.0
+offset_top = -1.0
+offset_right = 1535.0
+offset_bottom = 1023.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_k7me4")
+
+[node name="Redeye" type="TextureButton" parent="TextureRect"]
+layout_mode = 0
+offset_left = 847.0
+offset_top = 161.0
+offset_right = 1199.0
+offset_bottom = 972.0
+mouse_default_cursor_shape = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="Purple" type="TextureButton" parent="TextureRect"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 285.0
+offset_top = 84.0
+offset_right = -894.0
+offset_bottom = -51.0
+mouse_default_cursor_shape = 2
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(769, 505)
+zoom = Vector2(0.75, 0.64)
+
+[connection signal="pressed" from="TextureRect/Redeye" to="." method="_on_redeye_pressed"]
+[connection signal="pressed" from="TextureRect/Purple" to="." method="_on_purple_pressed"]
