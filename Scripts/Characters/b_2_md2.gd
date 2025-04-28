@@ -91,7 +91,7 @@ extends CharacterBody2D
 @export var controlled: bool
 @export var block: bool = false
 @export var Score: int = 0
-@export var Device: int
+@export var device: int = 1
 var death: bool = true
 var launch_direction: Vector2
 
@@ -130,31 +130,31 @@ func input_calc():
 
 
 func get_movement_input():
-	if Input.is_joy_button_pressed(Device, JOY_BUTTON_DPAD_DOWN) and Input.is_joy_button_pressed(Device, JOY_BUTTON_DPAD_LEFT):
+	if Input.is_joy_button_pressed(1, JOY_BUTTON_DPAD_DOWN) and Input.is_joy_button_pressed(1, JOY_BUTTON_DPAD_LEFT):
 		#if enemy is to the right
 		if check_enemy_position(enemy):
 			input_movement = 1
 		elif !check_enemy_position(enemy):
 			input_movement = 3
-	elif Input.is_joy_button_pressed(Device, JOY_BUTTON_DPAD_DOWN) and Input.is_joy_button_pressed(Device, JOY_BUTTON_DPAD_RIGHT):
+	elif Input.is_joy_button_pressed(1, JOY_BUTTON_DPAD_DOWN) and Input.is_joy_button_pressed(1, JOY_BUTTON_DPAD_RIGHT):
 		if check_enemy_position(enemy):
 			input_movement = 3
 		elif !check_enemy_position(enemy):
 			input_movement = 1
-	elif Input.is_joy_button_pressed(Device, JOY_BUTTON_DPAD_UP) and Input.is_joy_button_pressed(Device, JOY_BUTTON_DPAD_LEFT):
+	elif Input.is_joy_button_pressed(1, JOY_BUTTON_DPAD_UP) and Input.is_joy_button_pressed(1, JOY_BUTTON_DPAD_LEFT):
 		input_movement = 7
-	elif Input.is_joy_button_pressed(Device, JOY_BUTTON_DPAD_UP) and Input.is_joy_button_pressed(Device, JOY_BUTTON_DPAD_RIGHT):
+	elif Input.is_joy_button_pressed(1, JOY_BUTTON_DPAD_UP) and Input.is_joy_button_pressed(1, JOY_BUTTON_DPAD_RIGHT):
 		input_movement = 9
-	elif Input.is_joy_button_pressed(Device, JOY_BUTTON_DPAD_DOWN):
+	elif Input.is_joy_button_pressed(1, JOY_BUTTON_DPAD_DOWN):
 		input_movement = 2
-	elif Input.is_joy_button_pressed(Device, JOY_BUTTON_DPAD_UP):
+	elif Input.is_joy_button_pressed(1, JOY_BUTTON_DPAD_UP):
 		input_movement = 8
-	elif Input.is_joy_button_pressed(Device, JOY_BUTTON_DPAD_LEFT):
+	elif Input.is_joy_button_pressed(1, JOY_BUTTON_DPAD_LEFT):
 		if check_enemy_position(enemy):
 			input_movement = 4
 		elif !check_enemy_position(enemy):
 			input_movement = 6
-	elif Input.is_joy_button_pressed(Device, JOY_BUTTON_DPAD_RIGHT):
+	elif Input.is_joy_button_pressed(1, JOY_BUTTON_DPAD_RIGHT):
 		if check_enemy_position(enemy):
 			input_movement = 6
 		elif !check_enemy_position(enemy):
@@ -163,28 +163,23 @@ func get_movement_input():
 		input_movement = 5
 
 func get_attack_input():
-	if Input.is_joy_button_pressed(Device, JOY_BUTTON_X):
+	if Input.is_joy_button_pressed(1, JOY_BUTTON_X):
 		attack = "Punch"
 		return true
-	elif Input.is_joy_button_pressed(Device, JOY_BUTTON_Y):
+	elif Input.is_joy_button_pressed(1, JOY_BUTTON_Y):
 		attack = "Kick"
 		return true
-	elif Input.is_joy_button_pressed(Device, JOY_BUTTON_A):
+	elif Input.is_joy_button_pressed(1, JOY_BUTTON_A):
 		attack = "Slash"
 		return true
-	elif Input.is_joy_button_pressed(Device, JOY_BUTTON_B):
+	elif Input.is_joy_button_pressed(1, JOY_BUTTON_B):
 		attack = "Heavy"
 		return true
 	else:
 		return false
 
-func _ready() -> void:
-	if Device == 0:
-		$Player_Label.text = "P1"
-		$Player_Label.modulate = Color.BLUE
-	if Device == 1:
-		$Player_Label.text = "P2"
-		$Player_Label.modulate = Color.RED
+
+
 func _physics_process(delta: float) -> void:
 	get_movement_input()
 	input_calc()
@@ -271,7 +266,7 @@ func _on_attacking_state_physics_processing(delta: float) -> void:
 	if attack == "Punch" and attack_connected:
 		if state == "Idle":
 			#to standing punch
-			if Input.is_joy_button_pressed(Device, JOY_BUTTON_X) and inputs[-1] in standing_inputs:
+			if Input.is_joy_button_pressed(1, JOY_BUTTON_X) and inputs[-1] in standing_inputs:
 				print("double")
 				time.stop()
 				$Attacks_ani.stop()
@@ -279,7 +274,7 @@ func _on_attacking_state_physics_processing(delta: float) -> void:
 				attack = "Punch"
 				$StateChart.send_event("to_idle")
 			#to standing kick
-			elif Input.is_joy_button_pressed(Device, JOY_BUTTON_Y) and inputs[-1] in standing_inputs:
+			elif Input.is_joy_button_pressed(1, JOY_BUTTON_Y) and inputs[-1] in standing_inputs:
 				print("gatling")
 				time.stop()
 				$Attacks_ani.stop()
@@ -290,7 +285,7 @@ func _on_attacking_state_physics_processing(delta: float) -> void:
 	if attack == "Kick" and attack_connected:
 		if state == "Idle":
 			#to dash
-			if Input.is_joy_button_pressed(Device, JOY_BUTTON_RIGHT_SHOULDER) and inputs[-1] == 6:
+			if Input.is_joy_button_pressed(1, JOY_BUTTON_RIGHT_SHOULDER) and inputs[-1] == 6:
 				time.stop()
 				$Attacks_ani.stop()
 				$Attacks/kick.disabled = true
@@ -299,7 +294,7 @@ func _on_attacking_state_physics_processing(delta: float) -> void:
 				$StateChart.send_event("to_dash")
 	if attack == "Slash" and attack_connected:
 		if state == "Idle":
-			if Input.is_joy_button_pressed(Device, JOY_BUTTON_RIGHT_SHOULDER) and inputs[-1] == 6:
+			if Input.is_joy_button_pressed(1, JOY_BUTTON_RIGHT_SHOULDER) and inputs[-1] == 6:
 				time.stop()
 				$Attacks_ani.stop()
 				$Attacks/c_slash.disabled = true
@@ -371,18 +366,18 @@ func _on_idle_state_entered() -> void:
 func _on_idle_state_processing(delta: float) -> void:
 	if controlled:
 		#if walking
-		if Input.is_joy_button_pressed(Device, JOY_BUTTON_DPAD_LEFT) or Input.is_joy_button_pressed(Device, JOY_BUTTON_DPAD_RIGHT):
+		if Input.is_joy_button_pressed(1, JOY_BUTTON_DPAD_LEFT) or Input.is_joy_button_pressed(1, JOY_BUTTON_DPAD_RIGHT):
 			$StateChart.send_event("to_walk")
 			
 		#if jumping
-		if Input.is_joy_button_pressed(Device, JOY_BUTTON_DPAD_UP):
+		if Input.is_joy_button_pressed(1, JOY_BUTTON_DPAD_UP):
 			if Input.is_action_pressed("Crouch"):
 				return
 			else:
 				$StateChart.send_event("to_jump")
 			
 		#if crouching
-		if Input.is_joy_button_pressed(Device, JOY_BUTTON_DPAD_DOWN):
+		if Input.is_joy_button_pressed(1, JOY_BUTTON_DPAD_DOWN):
 			if Input.is_action_pressed("Jump"):
 				return
 			else:
@@ -417,9 +412,9 @@ func _on_walk_state_processing(delta: float) -> void:
 	if abs(velocity.y) > 0:
 		$StateChart.send_event("to_jump")
 	#if crouching
-	if Input.is_joy_button_pressed(Device, JOY_BUTTON_DPAD_DOWN):
+	if Input.is_joy_button_pressed(1, JOY_BUTTON_DPAD_DOWN):
 		$StateChart.send_event("to_crouch")
-	if Input.is_joy_button_pressed(Device, JOY_BUTTON_RIGHT_SHOULDER) and inputs[-1] == 6:
+	if Input.is_joy_button_pressed(1, JOY_BUTTON_RIGHT_SHOULDER) and inputs[-1] == 6:
 		$StateChart.send_event("to_dash")
 	if inputs[-1] in blocking_inputs or block:
 		$Hit_Box.add_to_group("Blocking")
@@ -427,18 +422,13 @@ func _on_walk_state_processing(delta: float) -> void:
 		$Hit_Box.remove_from_group("Blocking")
 func _on_walk_state_physics_processing(delta: float) -> void:
 	# Handle jump.
-	if Input.is_joy_button_pressed(Device, JOY_BUTTON_DPAD_UP) and is_on_floor():
+	if Input.is_action_just_pressed("Jump") and is_on_floor():
 		velocity.y = JUMP_VELOCITY * delta
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
-	if Input.is_joy_button_pressed(Device, JOY_BUTTON_DPAD_LEFT):
-		direction = Vector2(-1, 0)
-	if Input.is_joy_button_pressed(Device, JOY_BUTTON_DPAD_RIGHT):
-		direction = Vector2(1, 0)
-	if!Input.is_joy_button_pressed(Device, JOY_BUTTON_DPAD_LEFT) and !Input.is_joy_button_pressed(Device, JOY_BUTTON_DPAD_RIGHT):
-		direction = Vector2.ZERO
+	var direction := Input.get_axis("Move_left", "Move_right")
 	if direction:
-		velocity.x = direction.x * SPEED * delta
+		velocity.x = direction * SPEED * delta
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 	check_enemy_position(enemy)
@@ -471,7 +461,7 @@ func _on_jump_state_processing(delta: float) -> void:
 			$StateChart.send_event("to_idle")
 		elif abs(velocity.x) > 0:
 			$StateChart.send_event("to_walk")
-	if Input.is_joy_button_pressed(Device, JOY_BUTTON_DPAD_UP) and jump == false:
+	if Input.is_joy_button_pressed(1, JOY_BUTTON_DPAD_UP) and jump == false:
 		jump = true
 		$StateChart.send_event("to_idle")
 	if inputs[-1] in blocking_inputs or block:
