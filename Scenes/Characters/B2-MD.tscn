@@ -1,4 +1,4 @@
-[gd_scene load_steps=100 format=3 uid="uid://bvw7u554liayn"]
+[gd_scene load_steps=101 format=3 uid="uid://bvw7u554liayn"]
 
 [ext_resource type="Script" path="res://Scripts/Characters/b_2_md.gd" id="1_8svha"]
 [ext_resource type="Texture2D" uid="uid://bgmujha8yn2nk" path="res://Assets/Sprites/Characters/B2-MD/Idle/ag000_00.png" id="2_bwk7r"]
@@ -624,6 +624,9 @@ _data = {
 "slash": SubResource("Animation_yyunh")
 }
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6ii64"]
+size = Vector2(87, 20)
+
 [node name="B2-MD" type="CharacterBody2D" groups=["B2-MD", "Player"]]
 collision_layer = 524288
 collision_mask = 524288
@@ -1013,6 +1016,17 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 tab_size = 0
 
+[node name="Anti_Land_Box" type="Area2D" parent="."]
+position = Vector2(1, 299)
+collision_layer = 524288
+collision_mask = 524288
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Anti_Land_Box"]
+position = Vector2(-0.5, -134)
+shape = SubResource("RectangleShape2D_6ii64")
+disabled = true
+debug_color = Color(0.861219, 0.000655156, 0.872631, 0.42)
+
 [connection signal="area_entered" from="Hit_Box" to="." method="_on_hit_box_area_entered"]
 [connection signal="area_entered" from="Attacks" to="." method="_on_attacks_area_entered"]
 [connection signal="timeout" from="timers/blockstun" to="." method="_on_blockstun_timeout"]
@@ -1063,3 +1077,4 @@ tab_size = 0
 [connection signal="state_physics_processing" from="StateChart/Root/Death" to="." method="_on_death_state_physics_processing"]
 [connection signal="state_processing" from="StateChart/Root/Death" to="." method="_on_death_state_processing"]
 [connection signal="animation_finished" from="Attacks_ani" to="." method="_on_attacks_ani_animation_finished"]
+[connection signal="body_entered" from="Anti_Land_Box" to="." method="_on_anti_land_box_body_entered"]

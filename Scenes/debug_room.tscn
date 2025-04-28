@@ -11,13 +11,13 @@ position = Vector2(946, 696)
 [node name="Stage" parent="." instance=ExtResource("1_p85ev")]
 
 [node name="B2-MD2" parent="." node_paths=PackedStringArray("enemy") instance=ExtResource("2_x2mih")]
-position = Vector2(801, 826)
+position = Vector2(1227, 470)
 controlled = true
 Device = 1
 enemy = NodePath("../B2-MD")
 
 [node name="B2-MD" parent="." node_paths=PackedStringArray("enemy") instance=ExtResource("2_x2mih")]
-position = Vector2(1219, 802)
+position = Vector2(857, 854)
 controlled = true
 enemy = NodePath("../B2-MD2")
 

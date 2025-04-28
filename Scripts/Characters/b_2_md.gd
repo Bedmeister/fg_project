@@ -185,10 +185,10 @@ func _ready() -> void:
 	if Device == 1:
 		$Player_Label.text = "P2"
 		$Player_Label.modulate = Color.RED
+	$Anti_Land_Box/CollisionShape2D.disabled = true
 func _physics_process(delta: float) -> void:
 	get_movement_input()
 	input_calc()
-	
 	if is_on_floor():
 		jump = false
 	
@@ -360,6 +360,7 @@ func attack_loop():
 		return false
 
 func _on_idle_state_entered() -> void:
+	$Anti_Land_Box/CollisionShape2D.disabled = false
 	juggle_rating = 2.0
 	state = "Idle"
 	if attack_loop():
@@ -401,6 +402,7 @@ func _on_idle_state_physics_processing(delta: float) -> void:
 			$StateChart.send_event("to_attacking")
 func _on_idle_state_exited() -> void:
 	prev_box = "Idle"
+	$Anti_Land_Box/CollisionShape2D.disabled = true
 
 
 
@@ -712,3 +714,13 @@ func _on_death_state_physics_processing(delta: float) -> void:
 	pass
 func _on_death_state_exited() -> void:
 	$Hit_Box/Idle.disabled = false
+
+
+func _on_anti_land_box_body_entered(body: Node2D) -> void:
+	print("anti land")
+	if check_enemy_position(enemy) and body.is_in_group("Player"):
+		inputs[-1] = 7
+		$StateChart.send_event("to_jump")
+	elif !check_enemy_position(enemy) and body.is_in_group("Player"):
+		inputs[-1] = 9
+		$StateChart.send_event("to_jump")
